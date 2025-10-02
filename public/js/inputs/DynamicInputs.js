@@ -1,3 +1,5 @@
+let deletedCubeIds = []; // cubos eliminados
+
 document.addEventListener("DOMContentLoaded", function () {
     let cubeCount = 0;
     const maxCubes = 4;
@@ -68,12 +70,11 @@ document.addEventListener("DOMContentLoaded", function () {
     // === Botón agregar cubo en UPDATE ===
     addBtnUpdate.addEventListener("click", function () {
         if (cubeCountUpdate < maxCubesUpdate) {
+            cubeCountUpdate++;
             const div = document.createElement("div");
             div.classList.add("input-group", "mb-2");
             div.innerHTML = `
-                <span class="input-group-text">Cubo ${
-                    cubeCountUpdate + 1
-                }</span>
+                <span class="input-group-text">Cubo ${cubeCountUpdate}</span>
                 <input type="text" name="cubes[${cubeCountUpdate}][text_cube]" class="form-control cube-input-update" required>
                 <select name="cubes[${cubeCountUpdate}][state_cube]" class="form-select">
                     <option value="active">Activo</option>
@@ -82,9 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <button type="button" class="btn btn-danger removeCubeUpdate">X</button>
             `;
             containerUpdate.appendChild(div);
-            cubeCountUpdate++;
 
-            // Botón eliminar
             div.querySelector(".removeCubeUpdate").addEventListener(
                 "click",
                 function () {
@@ -127,30 +126,30 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("update_id_sentence").value =
             sentence.id_sentence;
 
-        // Cubos actuales
+        // Cubos existentes
         if (sentence.cubes && sentence.cubes.length > 0) {
             sentence.cubes.forEach((cube) => {
                 cubeCountUpdate++;
                 const div = document.createElement("div");
                 div.classList.add("input-group", "mb-2");
                 div.innerHTML = `
-                    <span class="input-group-text">Cubo ${cubeCountUpdate}</span>
-                    <input type="text" name="cubes[${cubeCountUpdate}][text_cube]" class="form-control cube-input-update" value="${
+                <span class="input-group-text">Cubo ${cubeCountUpdate}</span>
+                <input type="text" name="cubes[${cubeCountUpdate}][text_cube]" class="form-control cube-input-update" value="${
                     cube.text_cube
                 }" required>
-                    <select name="cubes[${cubeCountUpdate}][state_cube]" class="form-select">
-                        <option value="active" ${
-                            cube.state_cube === "active" ? "selected" : ""
-                        }>Activo</option>
-                        <option value="inactive" ${
-                            cube.state_cube === "inactive" ? "selected" : ""
-                        }>Inactivo</option>
-                    </select>
-                    <input type="hidden" name="cubes[${cubeCountUpdate}][id_cube]" value="${
+                <select name="cubes[${cubeCountUpdate}][state_cube]" class="form-select">
+                    <option value="active" ${
+                        cube.state_cube === "active" ? "selected" : ""
+                    }>Activo</option>
+                    <option value="inactive" ${
+                        cube.state_cube === "inactive" ? "selected" : ""
+                    }>Inactivo</option>
+                </select>
+                <input type="hidden" name="cubes[${cubeCountUpdate}][id_cube]" value="${
                     cube.id_cube
                 }">
-                    <button type="button" class="btn btn-danger removeCubeUpdate">X</button>
-                `;
+                <button type="button" class="btn btn-danger removeCubeUpdate">X</button>
+            `;
                 containerUpdate.appendChild(div);
 
                 div.querySelector(".removeCubeUpdate").addEventListener(
@@ -164,8 +163,25 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         }
 
-        // Resetear frase oculta
+        // Frase oculta
         hiddenSentenceUpdate.value = sentence.text_sentence;
         formUpdate.action = `/sentences/update/${sentence.id_sentence}`;
     };
 });
+
+function renumerarCubesUpdate() {
+    Array.from(containerUpdate.children).forEach((div, i) => {
+        div.querySelector(".input-group-text").textContent = "Cubo " + (i + 1);
+        div.querySelector("input[type=text]").setAttribute(
+            "name",
+            `cubes[${i}][text_cube]`
+        );
+        div.querySelector("select").setAttribute(
+            "name",
+            `cubes[${i}][state_cube]`
+        );
+
+        const hiddenId = div.querySelector('input[type="hidden"]');
+        if (hiddenId) hiddenId.setAttribute("name", `cubes[${i}][id_cube]`);
+    });
+}

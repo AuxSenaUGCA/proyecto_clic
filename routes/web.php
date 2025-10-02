@@ -24,6 +24,7 @@ Route::prefix('sentences')->group(function () {
     Route::post('/store', [SentenceController::class, 'store'])->name('sentences.store'); // Crear
     Route::put('/update/{id_sentence}', [SentenceController::class, 'update'])->name('sentences.update'); // Actualizar
     Route::delete('/delete/{id_sentence}', [SentenceController::class, 'destroy'])->name('sentences.destroy'); // Eliminar
+    Route::get('/search', [SentenceController::class, 'search'])->name('sentences.search'); // Buscar
 });
 
 Route::get('/Test/{dato}', [ClicController::class, 'index']);

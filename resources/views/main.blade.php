@@ -5,6 +5,12 @@
 
     <h2 class="mb-4">Gestión de Frases</h2>
 
+    <div class="mb-3">
+        <label for="sentenceSearch" class="form-label">Buscar Por Texto</label>
+        <input type="text" id="sentenceSearch" class="form-control" placeholder="Escribe para buscar...">
+        <div id="searchResults" class="list-group mt-1"></div>
+    </div>
+
     <!-- Botones -->
     <div class="d-flex gap-3 mb-4">
         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createSentenceModal">Crear Frase</button>
@@ -118,5 +124,5 @@
 
 <script src="{{ asset('js/cards/createCardsSentences.js') }}"></script>
 <script src="{{ asset('js/inputs/DynamicInputs.js') }}"></script>
-
+<script src="{{ asset('js/searchs/searchSentences.js') }}"></script>
 @endsection

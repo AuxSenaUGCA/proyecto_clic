@@ -59,6 +59,17 @@ class SentenceController extends Controller
         return response()->json($sentence);
     }
 
+    public function search(Request $request)
+    {
+        $q = $request->get('q');
+
+        $sentences = Sentence::where('text_sentence', 'LIKE', "%{$q}%")
+            ->limit(5) // máximo 5 resultados
+            ->get(['id_sentence', 'text_sentence']);
+
+        return response()->json($sentences);
+    }
+
     // Actualizar una frase y sus cubos
     public function update(Request $request, $id)
     {
