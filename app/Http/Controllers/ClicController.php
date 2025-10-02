@@ -6,11 +6,11 @@ use Illuminate\Http\Request;
 
 class ClicController extends Controller
 {
-    public function index($dato) 
+    public function index($input) 
     {
-        $respuesta = "Respuesta de prueba: " . $dato;
+        $response = "Respuesta de prueba: " . $input;
 
-        $data = ['success' => true, 'Respuesta' => $respuesta];
+        $data = ['success' => true, 'Response' => $response];
         return response()->json($data, 200, []);
     }
 }
