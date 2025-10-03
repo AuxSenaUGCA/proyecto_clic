@@ -87,9 +87,17 @@ class SentenceController extends Controller
         // Actualizar la frase
         $sentence->update($request->only('text_sentence', 'state_sentence'));
 
-        // Actualizar o crear cubos
+        // --- ELIMINAR CUBOS BORRADOS ---
+        if ($request->filled('deleted_cubes')) {
+            $deletedIds = explode(',', $request->input('deleted_cubes'));
+            Cube::whereIn('id_cube', $deletedIds)->delete();
+        }
+
+        // --- ACTUALIZAR O CREAR CUBOS Y RENUMERAR ---
         if ($request->has('cubes')) {
             foreach ($request->cubes as $index => $cubeData) {
+                $numberCube = $index + 1;
+
                 if (!empty($cubeData['id_cube'])) {
                     // actualizar cubo existente
                     $cube = Cube::find($cubeData['id_cube']);
@@ -97,15 +105,13 @@ class SentenceController extends Controller
                         $cube->update([
                             'text_cube'  => $cubeData['text_cube'],
                             'state_cube' => $cubeData['state_cube'] ?? 'active',
+                            'number_cube' => $numberCube,
                         ]);
                     }
                 } else {
                     // crear nuevo cubo
-                    $lastNumber = Cube::where('id_sentence', $sentence->id_sentence)->max('number_cube');
-                    $newNumber  = $lastNumber ? $lastNumber + 1 : 1;
-
                     Cube::create([
-                        'number_cube' => $newNumber,
+                        'number_cube' => $numberCube,
                         'text_cube'   => $cubeData['text_cube'],
                         'state_cube'  => $cubeData['state_cube'] ?? 'active',
                         'id_sentence' => $sentence->id_sentence
