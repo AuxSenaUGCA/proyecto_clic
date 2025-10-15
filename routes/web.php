@@ -8,8 +8,11 @@ use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
     return view('main');
-})->name('home');
+})->name('sentences');
 
+Route::get('/users', function () {
+    return view('users');
+})->name('users');
 
 Route::prefix('cubes')->group(function () {
     Route::get('/index', [CubeController::class, 'index'])->name('cubes.index'); // Listar todos
@@ -35,6 +38,7 @@ Route::prefix('users')->group(function () {
     Route::post('/store', [UserController::class, 'store'])->name('users.store'); // Crear usuario
     Route::put('/update/{id}', [UserController::class, 'update'])->name('users.update'); // Actualizar usuario
     Route::delete('/delete/{id}', [UserController::class, 'destroy'])->name('users.destroy'); // Eliminar usuario
+    Route::get('/search', [UserController::class, 'search'])->name('users.search'); // Buscar
 });
 
 

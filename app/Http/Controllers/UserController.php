@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
 {
@@ -14,9 +12,9 @@ class UserController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => ['required', 'string', Password::defaults()],
-            'avatar' => 'nullable|string|max:255'
+            'avatar' => 'nullable|string|max:255',
+            'score' => 'nullable|integer|min:0',
+            'completion_time' => 'nullable|integer|min:0', // segundos, milisegundos, etc.
         ]);
 
         $user = User::create($data);
@@ -37,6 +35,13 @@ class UserController extends Controller
         return response()->json($user);
     }
 
+    public function search(Request $request)
+    {
+        $query = $request->get('q', '');
+        $users = User::where('name', 'like', "%$query%")->get();
+        return response()->json($users);
+    }
+
     // Actualizar usuario
     public function update(Request $request, $id)
     {
@@ -44,14 +49,10 @@ class UserController extends Controller
 
         $data = $request->validate([
             'name' => 'sometimes|required|string|max:255',
-            'email' => 'sometimes|required|string|email|max:255|unique:users,email,' . $id,
-            'password' => ['sometimes', 'required', 'string', Password::defaults()],
-            'avatar' => 'nullable|string|max:255'
+            'avatar' => 'nullable|string|max:255',
+            'score' => 'nullable|integer|min:0',
+            'completion_time' => 'nullable|integer|min:0',
         ]);
-
-        if (isset($data['password'])) {
-            $data['password'] = Hash::make($data['password']);
-        }
 
         $user->update($data);
 
@@ -64,6 +65,6 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
 
-        return response()->json(['message' => 'Usuario eliminado correctamente']);
+        return redirect('/users');
     }
 }

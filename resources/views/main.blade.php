@@ -123,6 +123,6 @@
 </div>
 
 <script src="{{ asset('js/cards/createCardsSentences.js') }}"></script>
-<script src="{{ asset('js/inputs/DynamicInputs.js') }}"></script>
+<script src="{{ asset('js/inputs/DynamicInputsSentences.js') }}"></script>
 <script src="{{ asset('js/searchs/searchSentences.js') }}"></script>
 @endsection

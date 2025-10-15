@@ -14,8 +14,8 @@
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand" href="#">Frases</a>
-            <a class="navbar-brand" href="#">Tabla Clasificacion</a>
+            <a class="navbar-brand" href="{{ route('sentences') }}">Frases</a>
+            <a class="navbar-brand" href="{{ route('users') }}">Tabla Clasificacion</a>
         </div>
     </nav>
 
