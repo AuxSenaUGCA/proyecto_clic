@@ -24,19 +24,13 @@ class UserController extends Controller
 
         if ($user) {
             // Si ya existe, retornamos el usuario existente
-            return response()->json([
-                'message' => 'Usuario ya existente',
-                'user' => $user
-            ], 200);
+            return response()->json($user, 201);
         }
 
         // Si no existe, lo creamos
         $user = User::create($data);
 
-        return response()->json([
-            'message' => 'Usuario creado exitosamente',
-            'user' => $user
-        ], 201);
+        return response()->json($user, 201);
     }
 
     // Consultar todos los usuarios
@@ -65,7 +59,13 @@ class UserController extends Controller
         $user = User::findOrFail($id);
 
         $data = $request->validate([
-            'name' => 'sometimes|required|string|max:255',
+            'name' => [
+                'sometimes',
+                'required',
+                'string',
+                'max:255',
+                'unique:users,name,' . $id, // 👈 permite mantener su propio name
+            ],
             'avatar' => 'nullable|string|max:255',
             'score' => 'nullable|integer|min:0',
             'completion_time' => 'nullable|integer|min:0',
