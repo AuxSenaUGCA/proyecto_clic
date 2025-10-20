@@ -58,7 +58,7 @@
     <div class="modal fade" id="clearUserModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header bg-danger text-white">
+                <div class="modal-header bg-warning text-white">
                     <h5 class="modal-title">Limpiar datos de usuario</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
@@ -71,7 +71,7 @@
                         @method('POST')
                         <input type="hidden" id="clear_id_user" name="id_user">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-danger">Limpiar</button>
+                        <button type="submit" class="btn btn-warning">Limpiar</button>
                     </form>
                 </div>
             </div>

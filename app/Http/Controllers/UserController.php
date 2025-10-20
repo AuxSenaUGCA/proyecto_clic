@@ -33,10 +33,14 @@ class UserController extends Controller
         return response()->json($user, 201);
     }
 
-    // Consultar todos los usuarios
+    // Consultar todos los usuarios ordenados por puntaje (desc) y tiempo (asc)
     public function index()
     {
-        return response()->json(User::all());
+        $users = User::orderBy('score', 'desc') 
+            ->orderBy('completion_time', 'asc')
+            ->get();
+
+        return response()->json($users);
     }
 
     // Consultar un usuario por id
@@ -86,7 +90,7 @@ class UserController extends Controller
         }
 
         // Eliminar todos los registros
-        User::truncate(); 
+        User::truncate();
 
         return redirect('/users');
     }
