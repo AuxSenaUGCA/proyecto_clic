@@ -12,8 +12,9 @@
                     <i class="bi bi-trash3"></i> Limpiar Datos
                 </button>
             </form>
-            <form id="truncateDataForm" action="{{ route('users.destroyAll') }}" method="DELETE">
+            <form id="truncateDataForm" action="{{ route('users.destroyAll') }}" method="POST">
                 @csrf
+                @method('DELETE')
                 <button type="submit" class="btn btn-danger">
                     <i class="bi bi-trash3"></i> Eliminar Usuarios
                 </button>
