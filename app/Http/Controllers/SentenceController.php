@@ -52,6 +52,16 @@ class SentenceController extends Controller
         return response()->json($sentences);
     }
 
+    public function indexActive()
+    {
+        $sentences = Sentence::with('cubes')
+            ->where('state_sentence', 'active')
+            ->get()
+            ->values(); // asegura que sea un array
+
+        return response()->json($sentences);
+    }
+
     // Consultar una frase
     public function show($id)
     {

@@ -27,4 +27,7 @@ Route::prefix('users')->group(function () {
     Route::post('/store', [UserController::class, 'store'])->name('users.store');
     Route::delete('/delete/{id}', [UserController::class, 'destroy'])->name('users.destroy'); // Eliminar usuario
     Route::get('/search', [UserController::class, 'search'])->name('users.search'); // Buscar
+    Route::post('/clear', [UserController::class, 'clearAll'])->name('users.clear');
+    Route::post('/clear/{id}', [UserController::class, 'clearOne'])->name('users.clearOne');
+    Route::delete('/destroyAll', [UserController::class, 'destroyAll'])->name('users.destroyAll');
 });

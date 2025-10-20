@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ClicController;
 use App\Http\Controllers\CubeController;
+use App\Http\Controllers\SentenceController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,5 +22,10 @@ Route::prefix('users')->group(function () {
     Route::delete('/delete/{id}', [UserController::class, 'destroy'])->name('users.destroy'); // Eliminar usuario
     Route::get('/search', [UserController::class, 'search'])->name('users.search'); // Buscar
 });
+
+Route::prefix('sentences')->group(function () {
+    Route::get('/sentencesActives', [SentenceController::class, 'indexActive']);
+});
+
 
 Route::get('/Test/{dato}', [ClicController::class, 'index']);

@@ -76,11 +76,57 @@ class UserController extends Controller
         return response()->json($user);
     }
 
+    public function destroyAll()
+    {
+        // Verificar si hay usuarios
+        $count = User::count();
+
+        if ($count === 0) {
+            return response()->json(['message' => 'No hay usuarios para eliminar.']);
+        }
+
+        // Eliminar todos los registros
+        User::truncate(); 
+
+        return redirect('/users');
+    }
+
     // Eliminar usuario
     public function destroy($id)
     {
         $user = User::findOrFail($id);
         $user->delete();
+
+        return redirect('/users');
+    }
+
+    // 🧹 Limpiar los datos de todos los usuarios
+    public function clearAll()
+    {
+        // Establece avatar como null y resetea los campos numéricos
+        User::query()->update([
+            'avatar' => null,
+            'score' => 0,
+            'completion_time' => 0,
+        ]);
+
+        return redirect('/users');
+    }
+
+    // 🧍‍♂️ Limpiar los datos de un usuario por ID
+    public function clearOne($id)
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(['error' => 'Usuario no encontrado.'], 404);
+        }
+
+        $user->update([
+            'avatar' => null,
+            'score' => 0,
+            'completion_time' => 0,
+        ]);
 
         return redirect('/users');
     }

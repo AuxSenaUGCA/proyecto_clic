@@ -3,7 +3,23 @@
 @section('content')
 <div class="container mt-5">
 
-    <h2 class="mb-4">Gestión de Usuarios</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">Gestión de Usuarios</h2>
+        <div class="d-flex justify-content-between align-items-center gap-4">
+            <form id="clearDataForm" action="{{ route('users.clear') }}" method="POST">
+                @csrf
+                <button type="submit" class="btn btn-danger">
+                    <i class="bi bi-trash3"></i> Limpiar Datos
+                </button>
+            </form>
+            <form id="truncateDataForm" action="{{ route('users.destroyAll') }}" method="DELETE">
+                @csrf
+                <button type="submit" class="btn btn-danger">
+                    <i class="bi bi-trash3"></i> Eliminar Usuarios
+                </button>
+            </form>
+        </div>
+    </div>
 
     <!-- Barra de búsqueda -->
     <div class="mb-3">
@@ -30,6 +46,31 @@
                         <input type="hidden" id="delete_id_user" name="id_user">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-danger">Eliminar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Limpiar Datos de Usuario -->
+
+    <div class="modal fade" id="clearUserModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">Limpiar datos de usuario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <p>¿Estás seguro que desea limpiar los datos de este usuario?</p>
+                </div>
+                <div class="modal-footer">
+                    <form method="POST" id="clearUserForm">
+                        @csrf
+                        @method('POST')
+                        <input type="hidden" id="clear_id_user" name="id_user">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger">Limpiar</button>
                     </form>
                 </div>
             </div>

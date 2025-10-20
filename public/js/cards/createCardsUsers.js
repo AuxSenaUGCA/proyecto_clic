@@ -10,18 +10,25 @@ function createCardUsers(user) {
                 Usuario #${user.id}
             </div>
             <div class="card-body text-center">
-                <img src="${user.avatar || '/images/default-avatar.png'}" 
+                <img src="${user.avatar || "/images/default-avatar.png"}" 
                     alt="Avatar" class="img-fluid rounded-circle mb-3" 
                     style="width: 80px; height: 80px; object-fit: cover;">
                 <h5>${user.name}</h5>
                 <p><strong>Puntaje:</strong> ${user.score ?? 0}</p>
-                <p><strong>Tiempo de completado:</strong> ${user.completion_time ?? '—'}</p>
+                <p><strong>Tiempo de completado:</strong> ${
+                    user.completion_time ?? "—"
+                }</p>
             </div>
             <div class="card-footer text-center">
                 <button class="btn btn-danger btn-sm" 
                     data-bs-toggle="modal" data-bs-target="#deleteUserModal"
                     onclick="fillDeleteUserModal(${user.id})">
                     Eliminar Usuario
+                </button>
+                <button class="btn btn-danger btn-sm" 
+                    data-bs-toggle="modal" data-bs-target="#clearUserModal"
+                    onclick="fillClearUserModal(${user.id})">
+                    Limpiar Datos Usuario
                 </button>
             </div>
         </div>
@@ -67,3 +74,11 @@ function fillDeleteUserModal(id_user) {
     form.action = `/users/delete/${id_user}`;
     document.getElementById("delete_id_user").value = id_user;
 }
+
+// === ELIMINAR USUARIO ===
+function fillClearUserModal(id_user) {
+    const form = document.querySelector("#clearUserModal form");
+    form.action = `/users/clear/${id_user}`;
+    document.getElementById("clear_id_user").value = id_user;
+}
+
