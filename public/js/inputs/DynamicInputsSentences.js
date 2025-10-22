@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function createCube({
         container,
         cubeIndex,
-        value = "",
+        value = {},
         id_cube = null,
         inputClass,
         removeClass,
@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <span class="input-group-text">Cubo ${cubeIndex}</span>
             <input type="text" name="cubes[${
                 cubeIndex - 1
-            }][text_cube]" class="form-control ${inputClass}" value="${value}" required>
+            }][text_cube]" class="form-control ${inputClass}" value="${value.text_cube}" required>
             <select name="cubes[${
                 cubeIndex - 1
             }][state_cube]" class="form-select">
@@ -160,7 +160,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const div = createCube({
                     container: cfg.container,
                     cubeIndex: cfg.cubeCount,
-                    value: cube.text_cube,
+                    value: cube,
                     id_cube: cube.id_cube,
                     inputClass: cfg.inputClass,
                     removeClass: cfg.removeClass,
