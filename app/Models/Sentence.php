@@ -30,4 +30,10 @@ class Sentence extends Model
     {
         return $this->hasMany(Cube::class, 'id_sentence', 'id_sentence');
     }
+
+    public function activeCubes()
+    {
+        return $this->hasMany(Cube::class, 'id_sentence', 'id_sentence')
+            ->where('state_cube', 'active');
+    }
 }

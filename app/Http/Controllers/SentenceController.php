@@ -54,7 +54,7 @@ class SentenceController extends Controller
 
     public function indexActive()
     {
-        $sentences = Sentence::with('cubes')
+        $sentences = Sentence::with('activeCubes')
             ->where('state_sentence', 'active')
             ->get()
             ->values(); // asegura que sea un array
