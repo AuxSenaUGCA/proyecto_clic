@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <span class="input-group-text">Cubo ${cubeIndex}</span>
             <input type="text" name="cubes[${
                 cubeIndex - 1
-            }][text_cube]" class="form-control ${inputClass}" value="${value.text_cube}" required>
+            }][text_cube]" class="form-control ${inputClass}" value="${value.text_cube || ""}" required>
             <select name="cubes[${
                 cubeIndex - 1
             }][state_cube]" class="form-select">
