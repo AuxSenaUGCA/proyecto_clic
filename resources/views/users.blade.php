@@ -86,6 +86,7 @@
 
 </div>
 
-<script src="{{ asset('js/cards/createCardsUsers.js') }}"></script>
-<script src="{{ asset('js/searchs/searchUsers.js') }}"></script>
+<script type="module" src="{{ asset('js/load/loadPage.js') }}"></script>
+<script type="module" src="{{ asset('js/cards/createCardsUsers.js') }}"></script>
+<script type="module" src="{{ asset('js/searchs/searchUsers.js') }}"></script>
 @endsection

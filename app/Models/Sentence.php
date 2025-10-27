@@ -16,6 +16,7 @@ class Sentence extends Model
 
     // Los campos que se pueden asignar masivamente
     protected $fillable = [
+        'id_section',
         'number_sentence',
         'text_sentence',
         'state_sentence',
@@ -35,5 +36,10 @@ class Sentence extends Model
     {
         return $this->hasMany(Cube::class, 'id_sentence', 'id_sentence')
             ->where('state_cube', 'active');
+    }
+
+    public function section()
+    {
+        return $this->belongsTo(Section::class, 'id_section');
     }
 }

@@ -3,6 +3,8 @@
 use App\Http\Controllers\SentenceController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SectionController;
+
 
 Route::get('/', function () {
     return view('main');
@@ -14,6 +16,7 @@ Route::get('/users', function () {
 
 Route::prefix('sentences')->group(function () {
     Route::get('/index', [SentenceController::class, 'index'])->name('sentences.index'); // Listar todos
+    Route::get('/indexSection/{id_section}', [SentenceController::class, 'indexBySection'])->name('sentences.bySection');
     Route::get('/show/{id}', [SentenceController::class, 'show'])->name('sentences.show'); // Consultar
     Route::post('/store', [SentenceController::class, 'store'])->name('sentences.store'); // Crear
     Route::put('/update/{id_sentence}', [SentenceController::class, 'update'])->name('sentences.update'); // Actualizar
@@ -30,4 +33,13 @@ Route::prefix('users')->group(function () {
     Route::post('/clear', [UserController::class, 'clearAll'])->name('users.clear');
     Route::post('/clear/{id}', [UserController::class, 'clearOne'])->name('users.clearOne');
     Route::delete('/destroyAll', [UserController::class, 'destroyAll'])->name('users.destroyAll');
+});
+
+Route::prefix('sections')->group(function () {
+    Route::get('/index', [SectionController::class, 'index'])->name('sections.index'); // Listar todas
+    Route::get('/show/{id_section}', [SectionController::class, 'show'])->name('sections.show'); // Consultar una
+    Route::post('/store', [SectionController::class, 'store'])->name('sections.store'); // Crear
+    Route::put('/update/{id_section}', [SectionController::class, 'update'])->name('sections.update'); // Actualizar
+    Route::delete('/delete/{id_section}', [SectionController::class, 'destroy'])->name('sections.destroy'); // Eliminar
+    Route::get('/search', [SectionController::class, 'search'])->name('sections.search'); // Buscar
 });

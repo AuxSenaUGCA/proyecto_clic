@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cube;
 use Illuminate\Http\Request;
 use App\Models\Sentence;
+use Illuminate\Support\Facades\Log;
 
 class SentenceController extends Controller
 {
@@ -14,58 +15,81 @@ class SentenceController extends Controller
         $request->validate([
             'text_sentence'   => 'required|string',
             'state_sentence'  => 'in:active,inactive',
+            'id_section'      => 'required|exists:sections,id_section',
             'cubes'           => 'array|max:4',
             'cubes.*.text_cube'  => 'required|string',
             'cubes.*.state_cube' => 'in:active,inactive'
         ]);
 
         // Número de la frase
-        $lastNumber = Sentence::max('number_sentence');
-        $newNumber  = $lastNumber ? $lastNumber + 1 : 1;
+        $lastNumber = Sentence::where('id_section', $request->id_section)
+            ->max('number_sentence');
+        $newNumber = $lastNumber ? $lastNumber + 1 : 1;
 
         // Crear frase
         $sentence = Sentence::create([
             'number_sentence' => $newNumber,
             'text_sentence'   => $request->text_sentence,
             'state_sentence'  => $request->state_sentence ?? 'active',
+            'id_section'      => $request->id_section,
         ]);
 
         // Crear cubos relacionados
+        $cubes = [];
         if ($request->has('cubes')) {
             foreach ($request->cubes as $index => $cubeData) {
-                Cube::create([
+                $cube = Cube::create([
                     'number_cube' => $index + 1,
                     'text_cube'   => $cubeData['text_cube'],
                     'state_cube'  => $cubeData['state_cube'] ?? 'active',
                     'id_sentence' => $sentence->id_sentence
                 ]);
+                $cubes[] = $cube;
             }
         }
 
-        return redirect('/');
+        $sentence->load('cubes');
+
+        return response()->json([
+            'success'  => true,
+            'message'  => 'Frase creada correctamente',
+            'sentence' => $sentence
+        ], 201);
     }
 
-    // Consultar todas las frases
+    // Consultar todas las frases (con secciones y cubos)
     public function index()
     {
-        $sentences = Sentence::with('cubes')->get();
+        $sentences = Sentence::with(['cubes', 'section'])->get();
         return response()->json($sentences);
     }
 
+    // Consultar todas las frases activas (con secciones y cubos activos)
     public function indexActive()
     {
-        $sentences = Sentence::with('active_cubes')
+        $sentences = Sentence::with(['active_cubes', 'section'])
             ->where('state_sentence', 'active')
             ->get()
-            ->values(); // asegura que sea un array
+            ->values(); // asegura que sea un array limpio (sin índices huecos)
 
         return response()->json($sentences);
     }
 
-    // Consultar una frase
+    // Consultar frases por sección específica
+    public function indexBySection($id_section)
+    {
+        $sentences = Sentence::with(['cubes', 'section'])
+            ->where('id_section', $id_section)
+            ->get();
+
+        return response()->json($sentences);
+    }
+
+
+    // Consultar una frase específica
     public function show($id)
     {
-        $sentence = Sentence::with('cubes')->findOrFail($id);
+        $sentence = Sentence::with(['cubes', 'section'])->findOrFail($id);
         return response()->json($sentence);
     }
 
@@ -88,49 +112,55 @@ class SentenceController extends Controller
         $request->validate([
             'text_sentence'   => 'sometimes|string',
             'state_sentence'  => 'sometimes|in:active,inactive',
+            'id_section'      => 'sometimes|exists:sections,id_section',
             'cubes'           => 'array|max:4',
             'cubes.*.id_cube' => 'sometimes|exists:cubes,id_cube',
             'cubes.*.text_cube'  => 'required|string',
-            'cubes.*.state_cube' => 'in:active,inactive'
+            'cubes.*.state_cube' => 'in:active,inactive',
+            'deleted_cubes'   => 'nullable|string', // IDs separados por coma
         ]);
 
-        // Actualizar la frase
-        $sentence->update($request->only('text_sentence', 'state_sentence'));
+        // --- ACTUALIZAR FRASE ---
+        $sentence->update($request->only('text_sentence', 'state_sentence', 'id_section'));
 
         // --- ELIMINAR CUBOS BORRADOS ---
         if ($request->filled('deleted_cubes')) {
-            $deletedIds = explode(',', $request->input('deleted_cubes'));
+            $deletedIds = array_filter(explode(',', $request->input('deleted_cubes')));
             Cube::whereIn('id_cube', $deletedIds)->delete();
         }
 
-        // --- ACTUALIZAR O CREAR CUBOS Y RENUMERAR ---
         if ($request->has('cubes')) {
             foreach ($request->cubes as $index => $cubeData) {
                 $numberCube = $index + 1;
 
                 if (!empty($cubeData['id_cube'])) {
-                    // actualizar cubo existente
                     $cube = Cube::find($cubeData['id_cube']);
                     if ($cube) {
                         $cube->update([
-                            'text_cube'  => $cubeData['text_cube'],
-                            'state_cube' => $cubeData['state_cube'] ?? 'active',
+                            'text_cube'   => $cubeData['text_cube'],
+                            'state_cube'  => $cubeData['state_cube'] ?? 'active',
                             'number_cube' => $numberCube,
                         ]);
                     }
                 } else {
-                    // crear nuevo cubo
                     Cube::create([
                         'number_cube' => $numberCube,
                         'text_cube'   => $cubeData['text_cube'],
                         'state_cube'  => $cubeData['state_cube'] ?? 'active',
-                        'id_sentence' => $sentence->id_sentence
+                        'id_sentence' => $sentence->id_sentence,
                     ]);
                 }
             }
         }
 
-        return redirect('/');
+        // --- RECARGAR RELACIÓN CON CUBOS ---
+        $sentence->load('cubes');
+
+        return response()->json([
+            'success'  => true,
+            'message'  => 'Frase actualizada correctamente',
+            'sentence' => $sentence
+        ], 201);
     }
 
     // Eliminar una frase y sus cubos
@@ -143,6 +173,9 @@ class SentenceController extends Controller
 
         $sentence->delete();
 
-        return redirect('/');
+        return response()->json([
+            'success'  => true,
+            'message'  => 'Frase eliminada correctamente'
+        ], 201);
     }
 }

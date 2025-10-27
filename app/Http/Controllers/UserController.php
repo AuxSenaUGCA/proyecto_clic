@@ -36,7 +36,7 @@ class UserController extends Controller
     // Consultar todos los usuarios ordenados por puntaje (desc) y tiempo (asc)
     public function index()
     {
-        $users = User::orderBy('score', 'desc') 
+        $users = User::orderBy('score', 'desc')
             ->orderBy('completion_time', 'asc')
             ->get();
 
@@ -92,7 +92,10 @@ class UserController extends Controller
         // Eliminar todos los registros
         User::truncate();
 
-        return redirect('/users');
+        return response()->json([
+            'success'  => true,
+            'message'  => 'Usuarios eliminados correctamente'
+        ], 201);
     }
 
     // Eliminar usuario
@@ -101,23 +104,26 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
 
-        return redirect('/users');
+        return response()->json([
+            'success'  => true,
+            'message'  => 'Usuario eliminado correctamente',
+        ], 201);
     }
 
-    // 🧹 Limpiar los datos de todos los usuarios
     public function clearAll()
     {
-        // Establece avatar como null y resetea los campos numéricos
         User::query()->update([
             'avatar' => null,
             'score' => 0,
             'completion_time' => 0,
         ]);
 
-        return redirect('/users');
+        return response()->json([
+            'success'  => true,
+            'message'  => 'Datos de usuarios limpiados correctamente'
+        ], 201);
     }
 
-    // 🧍‍♂️ Limpiar los datos de un usuario por ID
     public function clearOne($id)
     {
         $user = User::find($id);
@@ -132,6 +138,9 @@ class UserController extends Controller
             'completion_time' => 0,
         ]);
 
-        return redirect('/users');
+        return response()->json([
+            'success'  => true,
+            'message'  => 'Datos de usuario limpiado correctamente',
+        ], 201);
     }
 }

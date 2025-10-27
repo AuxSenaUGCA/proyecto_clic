@@ -2,7 +2,6 @@ function createCardUsers(user, index) {
     const userCard = document.createElement("div");
     userCard.className = "col-md-3 col-sm-6 mb-3 user-card";
     userCard.dataset.id = user.id;
-    console.log(user, index)
     // 🎖️ Colores para los tres primeros
     let borderColor = "";
     if (index === 0) borderColor = "3px solid gold"; // 1° - Dorado
@@ -42,50 +41,15 @@ function createCardUsers(user, index) {
     return userCard;
 }
 
-// Carga todos los usuarios y crea las tarjetas
-function loadUsers() {
-    const container = document.getElementById("usersContainer");
-
-    fetch("/users/index")
-        .then((res) => {
-            if (!res.ok) throw new Error("Error HTTP " + res.status);
-            return res.json();
-        })
-        .then((users) => {
-            container.innerHTML = "";
-
-            if (users.length === 0) {
-                container.innerHTML = `
-                    <div class="alert alert-info text-center">
-                        No hay usuarios registrados.
-                    </div>
-                `;
-                return;
-            }
-
-            users.forEach((user, index) => {
-                const userCard = createCardUsers(user, index);
-                container.appendChild(userCard);
-            });
-        })
-        .catch((err) => {
-            console.error("Error al cargar los usuarios:", err);
-            container.innerHTML = `
-                <div class="alert alert-danger text-center">
-                    Error al cargar los usuarios. Intenta nuevamente.
-                </div>
-            `;
-        });
-}
-
-// Llamar al cargar la página
-document.addEventListener("DOMContentLoaded", loadUsers);
-
 // === ELIMINAR USUARIO ===
 function fillDeleteUserModal(id_user) {
     const form = document.querySelector("#deleteUserModal form");
     form.action = `/users/delete/${id_user}`;
     document.getElementById("delete_id_user").value = id_user;
+    form.addEventListener("submit", function (event) {
+        e.preventDefault();
+        loadUsers();
+    });
 }
 
 // === ELIMINAR USUARIO ===
@@ -93,4 +57,11 @@ function fillClearUserModal(id_user) {
     const form = document.querySelector("#clearUserModal form");
     form.action = `/users/clear/${id_user}`;
     document.getElementById("clear_id_user").value = id_user;
+    form.addEventListener("submit", function (event) {
+        e.preventDefault();
+        loadUsers();
+    });
 }
+
+// Llamar al cargar la página
+document.addEventListener("DOMContentLoaded", loadUsers);

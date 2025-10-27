@@ -26,6 +26,3 @@ Route::prefix('users')->group(function () {
 Route::prefix('sentences')->group(function () {
     Route::get('/sentencesActives', [SentenceController::class, 'indexActive']);
 });
-
-
-Route::get('/Test/{dato}', [ClicController::class, 'index']);

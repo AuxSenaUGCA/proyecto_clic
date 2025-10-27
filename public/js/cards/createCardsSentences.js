@@ -1,5 +1,7 @@
+import { fillUpdateSentenceModal, fillDeleteSentenceModal } from "../sentences/fillFieldsSentences.js";
+
 // Crea y devuelve la card de una frase, con cubos
-function createCardSentences(sentence) {
+export function createCardSentences(sentence) {
     const sentenceCard = document.createElement("div");
     sentenceCard.className = "col-md-12 mb-4 sentence-card";
     sentenceCard.dataset.id = sentence.id_sentence;
@@ -29,15 +31,11 @@ function createCardSentences(sentence) {
             </div>
             <div class="card-footer">
                 <button class="btn btn-warning btn-sm" 
-                    data-bs-toggle="modal" data-bs-target="#updateSentenceModal"
-                    onclick='fillUpdateSentenceModal(${JSON.stringify(
-                        sentence
-                    )})'>
+                    data-bs-toggle="modal" data-bs-target="#updateSentenceModal" id="EditarFrase">
                     Editar Frase
                 </button>
                 <button class="btn btn-danger btn-sm" 
-                    data-bs-toggle="modal" data-bs-target="#deleteSentenceModal"
-                    onclick="fillDeleteSentenceModal(${sentence.id_sentence})">
+                    data-bs-toggle="modal" data-bs-target="#deleteSentenceModal" id="EliminarFrase">
                     Eliminar Frase
                 </button>
             </div>
@@ -74,58 +72,16 @@ function createCardSentences(sentence) {
         cubeContainer.appendChild(cubeCard);
     });
 
+    // ============== EVENTOS ============== //
+    const editarFraseBtn = sentenceCard.querySelector("#EditarFrase");
+    editarFraseBtn.addEventListener("click", () => {
+        fillUpdateSentenceModal(sentence);
+    });
+
+    const eliminarFraseBtn = sentenceCard.querySelector("#EliminarFrase");
+    eliminarFraseBtn.addEventListener("click", () => {
+        fillDeleteSentenceModal(sentence.id_sentence);
+    });
+
     return sentenceCard;
-}
-
-function loadSentences() {
-    const container = document.getElementById("sentencesContainer");
-
-    fetch("/sentences/index")
-        .then((res) => res.json())
-        .then((sentences) => {
-            container.innerHTML = "";
-            sentences.forEach((sentence) => {
-                const card = createCardSentences(sentence);
-                container.appendChild(card);
-            });
-        });
-}
-
-// Llamar al cargar la página
-document.addEventListener("DOMContentLoaded", loadSentences);
-
-function fillUpdateSentenceModal(sentence) {
-    // Formulario
-    const form = document.querySelector("#updateSentenceModal form");
-    form.action = `/sentences/update/${sentence.id_sentence}`;
-
-    // Estado
-    document.getElementById("update_state_sentence").value =
-        sentence.state_sentence;
-
-    // Inputs dinámicos de cubos
-    let container = document.getElementById("updateCubesContainer");
-    container.innerHTML = "";
-
-    if (sentence.cubes && sentence.cubes.length > 0) {
-        sentence.cubes.forEach((cube) => {
-            let input = document.createElement("input");
-            input.type = "text";
-            input.name = "cubes[]";
-            input.value = cube.text_cube;
-            input.classList.add("form-control", "mb-2");
-            container.appendChild(input);
-        });
-    }
-
-    // Guardar el id para la eliminación si se requiere
-    document.getElementById("delete_id_sentence").value = sentence.id_sentence;
-}
-
-// === ELIMINAR FRASE ===
-function fillDeleteSentenceModal(id_sentence) {
-    // Cambiar acción del formulario
-    const form = document.querySelector("#deleteSentenceModal form");
-    form.action = `/sentences/delete/${id_sentence}`; // DELETE
-    document.getElementById("delete_id_sentence").value = id_sentence;
 }

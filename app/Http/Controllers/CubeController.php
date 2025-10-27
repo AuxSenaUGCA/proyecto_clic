@@ -64,6 +64,36 @@ class CubeController extends Controller
         $cube = Cube::findOrFail($id);
         $cube->delete();
 
-        return response()->json(['message' => 'Cubo eliminado']);
+        return response()->json([
+            'success' => true,
+            'message' => 'Cubo eliminado'
+        ], 201);
     }
 }
+// esponse()->json([
+//                 'success' => true,
+//                 'message' => 'Reporte creado exitosamente',
+//                 'reporte' => [
+//                     'id'             => $reporte->id_reporte,
+//                     'numero_reporte' => $reporte->numero_reporte,
+//                     'tipo_reporte'   => $reporte->tipo_reporte,
+//                     'prioridad'      => $reporte->prioridad,
+//                     'descripcion'    => $reporte->descripcion,
+//                     'ubicacion'      => $reporte->ubicacion,
+//                     'estado'         => optional($reporte->estado)->descripcion ?? 'Pendiente',
+//                     'sede'           => optional($reporte->sede)->descripcion,
+//                     'created_at'     => $reporte->created_at,
+//                     'multimedia'     => $reporte->multimedia->map(
+//                         fn($m) => Paths::RelativePath() . '/' . $m->multimedia
+//                     ),
+//                     'usuario' => $reporte->usuario
+//                         ? trim(
+//                             $reporte->usuario->primer_nombre . ' ' .
+//                                 ($reporte->usuario->segundo_nombre ?? '') . ' ' .
+//                                 $reporte->usuario->primer_apellido . ' ' .
+//                                 ($reporte->usuario->segundo_apellido ?? '')
+//                         )
+//                         : 'Sin asignar',
+//                     'id_usuario' => $reporte->usuario?->id_usuario,
+//                 ]
+//             ], 201);
