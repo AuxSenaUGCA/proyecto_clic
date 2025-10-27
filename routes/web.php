@@ -36,7 +36,7 @@ Route::prefix('users')->group(function () {
 });
 
 Route::prefix('sections')->group(function () {
-    Route::get('/index', [SectionController::class, 'index'])->name('sections.index'); // Listar todas
+    Route::get('/indexPaginated', [SectionController::class, 'indexPaginated'])->name('sections.indexPaginated'); // Listar todas
     Route::get('/show/{id_section}', [SectionController::class, 'show'])->name('sections.show'); // Consultar una
     Route::post('/store', [SectionController::class, 'store'])->name('sections.store'); // Crear
     Route::put('/update/{id_section}', [SectionController::class, 'update'])->name('sections.update'); // Actualizar

@@ -3,6 +3,7 @@ import { createCardSentences } from "./CreateCardsSentences.js";
 import {
     fillCreateSentenceModal,
     fillDeleteSectionModal,
+    fillUpdateSectionModal,
 } from "../sections/fillFieldsSections.js";
 
 // === Crear Card para una Sección ===
@@ -33,7 +34,9 @@ export function createCardSection(section) {
 
                 <hr>
                 <h6>Frases:</h6>
-                <div class="row" id="sentences_for_${section.id_section}">
+                <div class="row" id="sentences_for_${
+                    section.id_section
+                }" style="max-height: 25rem; overflow-y: auto;">
                     <p class="text-muted">Cargando frases...</p>
                 </div>
             </div>
@@ -44,7 +47,8 @@ export function createCardSection(section) {
                     data-bs-target="#createSentenceModal" id="AgregarFrase">
                     + Agregar Frase
                 </button>
-                <button class="btn btn-warning btn-sm" id="EditarSeccion">
+                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" 
+                    data-bs-target="#updateSectionModal" id="EditarSeccion">
                     Editar
                 </button>
                 <button class="btn btn-danger btn-sm" data-bs-toggle="modal" 
@@ -91,7 +95,7 @@ export function createCardSection(section) {
 
     const editarSeccionBtn = sectionCard.querySelector("#EditarSeccion");
     editarSeccionBtn.addEventListener("click", () => {
-        editSection(section.id_section);
+        fillUpdateSectionModal(section);
     });
 
     const eliminarSeccionBtn = sectionCard.querySelector("#EliminarSeccion");

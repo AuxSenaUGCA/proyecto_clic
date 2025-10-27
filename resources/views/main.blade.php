@@ -23,6 +23,7 @@
         <h2 class="mb-4">Secciones Existentes</h2>
         <div id="sectionsContainer" class="row"></div>
     </div>
+    <div id="paginator" class="mt-3"></div>
 </div>
 
 <!-- ============= MODALES SECCIONES ============= -->
@@ -37,6 +38,7 @@
             </div>
             <div class="modal-body">
                 <form id="sectionForm">
+
                     <div class="mb-3">
                         <label class="form-label">Nombre de la Sección</label>
                         <input type="text" class="form-control" name="name_section" required>
@@ -67,14 +69,44 @@
 
 <!-- Modal Actualizar Seccion -->
 <div class="modal fade" id="updateSectionModal" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-warning">
-                <h5 class="modal-title">Actualizar Seccion</h5>
+                <h5 class="modal-title">Actualizar Sección</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <form id="updateSectionForm">
+
+                    <input type="hidden" id="update_id_section" name="id_section" value="">
+
+                    <!-- Campos de la Sección -->
+                    <div class="mb-3">
+                        <label for="update_name_section" class="form-label">Nombre de la Sección</label>
+                        <input type="text" class="form-control" id="update_name_section" name="name_section" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="update_state_section" class="form-label">Estado</label>
+                        <select class="form-select" id="update_state_section" name="state_section">
+                            <option value="active">Activo</option>
+                            <option value="inactive">Inactivo</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="update_id_profe" class="form-label">Profesor</label>
+                        <select class="form-select" id="update_id_profe" name="id_profe">
+                            <!-- Opciones de profesores -->
+                        </select>
+                    </div>
+
+                    <!-- Sentencias Reordenables -->
+                    <h6>Sentencias (arrastra para reordenar)</h6>
+                    <div id="sentencesContainer" class="list-group mb-3">
+                        <!-- Aquí se rellenan las sentencias dinámicamente -->
+                    </div>
+
                     <button type="submit" class="btn btn-warning">Actualizar</button>
                 </form>
             </div>
@@ -208,6 +240,7 @@
     </div>
 </div>
 
+<script type="module" src="{{ asset('js/load/paginador.js') }}"></script>
 <script type="module" src="{{ asset('js/load/loadPage.js') }}"></script>
 <script type="module" src="{{ asset('js/sections/fillFieldsSections.js') }}"></script>
 <script type="module" src="{{ asset('js/sentences/fillFieldsSentences.js') }}"></script>

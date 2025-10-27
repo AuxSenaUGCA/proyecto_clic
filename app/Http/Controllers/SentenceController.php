@@ -70,7 +70,7 @@ class SentenceController extends Controller
         $sentences = Sentence::with(['active_cubes', 'section'])
             ->where('state_sentence', 'active')
             ->get()
-            ->values(); // asegura que sea un array limpio (sin índices huecos)
+            ->values(); 
 
         return response()->json($sentences);
     }
@@ -80,11 +80,12 @@ class SentenceController extends Controller
     {
         $sentences = Sentence::with(['cubes', 'section'])
             ->where('id_section', $id_section)
-            ->get();
+            ->orderBy('number_sentence', 'asc') // <-- ordenar por número de sentencia
+            ->get()
+            ->values();
 
         return response()->json($sentences);
     }
-
 
     // Consultar una frase específica
     public function show($id)

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ClicController;
 use App\Http\Controllers\CubeController;
+use App\Http\Controllers\SectionController;
 use App\Http\Controllers\SentenceController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -25,4 +26,9 @@ Route::prefix('users')->group(function () {
 
 Route::prefix('sentences')->group(function () {
     Route::get('/sentencesActives', [SentenceController::class, 'indexActive']);
+});
+
+Route::prefix('sections')->group(function () {
+    Route::get('/index', [SectionController::class, 'index'])->name('sections.index'); // Listar todas
+
 });

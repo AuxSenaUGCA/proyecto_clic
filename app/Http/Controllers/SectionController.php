@@ -45,6 +45,19 @@ class SectionController extends Controller
         return response()->json($sections);
     }
 
+    // Consultar todas las secciones con paginación
+    public function indexPaginated(Request $request)
+    {
+        $perPage = 10; // Número de secciones por página, puedes ajustarlo
+        $page = $request->get('page', 1); // Página actual, por defecto 1
+
+        $sections = Section::with(['profesor', 'sentences'])
+            ->orderBy('id_section', 'asc')
+            ->paginate($perPage, ['*'], 'page', $page);
+
+        return response()->json($sections);
+    }
+
     // Consultar una sola sección
     public function show($id)
     {
@@ -58,12 +71,17 @@ class SectionController extends Controller
         $q = $request->get('q');
 
         $sections = Section::with('profesor')
-            ->whereHas('profesor', function ($query) use ($q) {
-                $query->where('name', 'LIKE', "%{$q}%");
+            ->where(function ($query) use ($q) {
+                $query->where('name_section', 'LIKE', "%{$q}%")
+                    ->orWhereHas('sentences', function ($sentenceQuery) use ($q) {
+                        $sentenceQuery->where('text_sentence', 'LIKE', "%{$q}%")
+                            ->orWhereHas('cubes', function ($cubeQuery) use ($q) {
+                                $cubeQuery->where('text_cube', 'LIKE', "%{$q}%");
+                            });
+                    });
             })
-            ->orWhere('id_section', 'LIKE', "%{$q}%")
             ->limit(5)
-            ->get(['id_section', 'id_profe']);
+            ->get(['id_section', 'name_section', 'id_profe']); // campos que quieres devolver
 
         return response()->json($sections);
     }
@@ -77,20 +95,42 @@ class SectionController extends Controller
             'id_profe' => 'nullable|exists:users,id',
             'name_section' => 'sometimes|string',
             'state_section' => 'sometimes|in:active,inactive',
+            'sentences' => 'nullable|array',
+            'sentences.*.id_sentence' => 'required|exists:sentences,id_sentence',
+            'sentences.*.text_sentence' => 'required|string',
+            'sentences.*.number_sentence' => 'required|integer',
         ]);
 
+        // --- Actualizar sección ---
         $section->update([
             'id_profe' => $request->id_profe ?? $section->id_profe,
             'name_section' => $request->name_section ?? $section->name_section,
             'state_section' => $request->state_section ?? $section->state_section,
         ]);
 
+        // --- Actualizar sentencias ---
+        if ($request->has('sentences')) {
+            foreach ($request->sentences as $sentenceData) {
+                $sentence = $section->sentences()->find($sentenceData['id_sentence']);
+                if ($sentence) {
+                    $sentence->update([
+                        'text_sentence' => $sentenceData['text_sentence'],
+                        'number_sentence' => $sentenceData['number_sentence'],
+                    ]);
+                }
+            }
+        }
+
+        // Recargar relación
+        $section->load('sentences');
+
         return response()->json([
             'success' => true,
-            'message' => 'Sección actualizada correctamente',
+            'message' => 'Sección y sentencias actualizadas correctamente',
             'section' => $section,
         ], 201);
     }
+
 
     // Eliminar una sección y sus frases asociadas
     public function destroy($id)

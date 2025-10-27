@@ -20,6 +20,7 @@ class Section extends Model
 
     public function sentences()
     {
-        return $this->hasMany(Sentence::class, 'id_section');
+        return $this->hasMany(Sentence::class, 'id_section')
+            ->orderBy('number_sentence', 'asc');
     }
 }

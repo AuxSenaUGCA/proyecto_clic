@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     // Si tu tabla tiene un campo de texto visible (como "nombre_section" o "titulo"),
                     // cámbialo aquí para que se muestre algo más descriptivo.
-                    item.textContent = `Sección #${section.id_section} - Profesor ID: ${section.id_profesor}`;
+                    item.textContent = `${section.name_section} - Profesor ID: ${section.id_profesor}`;
 
                     item.addEventListener("click", function () {
                         searchInput.value = `Sección #${section.id_section}`;

@@ -13,7 +13,7 @@ export function fillUpdateSentenceModal(sentence) {
     container.innerHTML = "";
     let cubeCount = 0;
 
-    cubes.forEach((cube) => {
+    sentence.cubes.forEach((cube) => {
         cubeCount++;
         createCubeUpdate({
             container,

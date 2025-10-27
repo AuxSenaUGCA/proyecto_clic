@@ -1,21 +1,23 @@
 import { createCardSection } from "../cards/CreateCardsSections.js";
+import { renderPaginator } from "./Paginador.js";
 
-export function loadSections() {
+export function loadSections(page = 1) {
+    // <-- page por defecto 1
     const container = document.getElementById("sectionsContainer");
 
-    fetch("/sections/index")
+    fetch(`/sections/indexPaginated?page=${page}`) // <-- usar el parámetro
         .then((res) => res.json())
         .then((sections) => {
             container.innerHTML = "";
-            if (sections.length === 0) {
+            if (sections.data.length === 0) {
                 container.innerHTML = `<p class="text-muted">No hay secciones registradas.</p>`;
                 return;
             }
-            console.log(sections)
-            sections.forEach((section) => {
+            sections.data.forEach((section) => {
                 const card = createCardSection(section);
                 container.appendChild(card);
             });
+            renderPaginator(sections);
         })
         .catch((err) => {
             console.error("Error al cargar secciones:", err);

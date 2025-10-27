@@ -36,8 +36,15 @@ function CreateSentence(event) {
         .then((response) => response.json())
         .then((data) => {
             if (data.success) {
-                loadSections();
-                formCreateSentence.reset();
+                const modalEl = document.getElementById("createSentenceModal");
+                const modal =
+                    bootstrap.Modal.getInstance(modalEl) ||
+                    new bootstrap.Modal(modalEl);
+                if (modal) {
+                    modal.hide();
+                    loadSections();
+                    formUpdateSection.reset();
+                }
             } else {
                 console.error("Error al crear la frase:", data);
             }
@@ -65,7 +72,7 @@ function UpdateSentence(event) {
 
     formData.set("text_sentence", text_sentence);
     formData.set("deleted_cubes", deletedCubeIds.join(","));
-    formData.set("_method", "PUT"); // Laravel lo interpretará como PUT
+    formData.set("_method", "PUT");
 
     const token = document
         .querySelector('meta[name="csrf-token"]')
@@ -79,8 +86,15 @@ function UpdateSentence(event) {
         .then((response) => response.json())
         .then((data) => {
             if (data.success) {
-                loadSections();
-                formUpdateSentence.reset();
+                const modalEl = document.getElementById("updateSentenceModal");
+                const modal =
+                    bootstrap.Modal.getInstance(modalEl) ||
+                    new bootstrap.Modal(modalEl);
+                if (modal) {
+                    modal.hide();
+                    loadSections();
+                    formUpdateSection.reset();
+                }
             } else {
                 console.error("Error al crear la sección:", data);
             }
@@ -107,8 +121,15 @@ function DeleteSentence(event) {
         .then((response) => response.json())
         .then((data) => {
             if (data.success) {
-                loadSections();
-                formDeleteSentence.reset();
+                const modalEl = document.getElementById("deleteSentenceModal");
+                const modal =
+                    bootstrap.Modal.getInstance(modalEl) ||
+                    new bootstrap.Modal(modalEl);
+                if (modal) {
+                    modal.hide();
+                    loadSections();
+                    formUpdateSection.reset();
+                }
             } else {
                 console.error("Error al crear la sección:", data);
             }

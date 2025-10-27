@@ -22,8 +22,15 @@ function CreateSection(event) {
         .then((response) => response.json())
         .then((data) => {
             if (data.success) {
-                loadSections();
-                formCreateSection.reset();
+                const modalEl = document.getElementById("createSectionModal");
+                const modal =
+                    bootstrap.Modal.getInstance(modalEl) ||
+                    new bootstrap.Modal(modalEl);
+                if (modal) {
+                    modal.hide();
+                    loadSections();
+                    formUpdateSection.reset();
+                }
             } else {
                 console.error("Error al crear la sección:", data);
             }
@@ -35,8 +42,24 @@ function CreateSection(event) {
 
 function UpdateSection(event) {
     event.preventDefault();
+    const form = this;
+    const formData = new FormData(form);
 
-    const formData = new FormData(formUpdateSection);
+    // Capturar orden de sentencias
+    const sentencesContainer = document.getElementById("sentencesContainer");
+    const sentenceInputs = Array.from(sentencesContainer.children);
+
+    sentenceInputs.forEach((div, index) => {
+        const id = div.dataset.id;
+        formData.append(`sentences[${index}][id_sentence]`, id);
+        formData.append(
+            `sentences[${index}][text_sentence]`,
+            div.querySelector("input").value
+        );
+        formData.append(`sentences[${index}][number_sentence]`, index + 1); // número según el orden
+    });
+    formData.set("_method", "PUT");
+
     const token = document
         .querySelector('meta[name="csrf-token"]')
         .getAttribute("content");
@@ -48,17 +71,19 @@ function UpdateSection(event) {
         },
         body: formData,
     })
-        .then((response) => response.json())
+        .then((res) => res.json())
         .then((data) => {
             if (data.success) {
-                loadSections();
-                formUpdateSection.reset();
-            } else {
-                console.error("Error al crear la sección:", data);
+                const modalEl = document.getElementById("updateSectionModal");
+                const modal =
+                    bootstrap.Modal.getInstance(modalEl) ||
+                    new bootstrap.Modal(modalEl);
+                if (modal) {
+                    modal.hide();
+                    loadSections();
+                    formUpdateSection.reset();
+                }
             }
-        })
-        .catch((error) => {
-            console.error("Error:", error);
         });
 }
 
@@ -79,8 +104,15 @@ function DeleteSection(event) {
         .then((response) => response.json())
         .then((data) => {
             if (data.success) {
-                loadSections();
-                formDeleteSection.reset();
+                const modalEl = document.getElementById("deleteSectionModal");
+                const modal =
+                    bootstrap.Modal.getInstance(modalEl) ||
+                    new bootstrap.Modal(modalEl);
+                if (modal) {
+                    modal.hide();
+                    loadSections();
+                    formUpdateSection.reset();
+                }
             } else {
                 console.error("Error al crear la sección:", data);
             }
