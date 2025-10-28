@@ -45,6 +45,32 @@ class SectionController extends Controller
         return response()->json($sections);
     }
 
+    public function indexActive()
+    {
+        $sections = Section::with(['profesor', 'active_sentences.active_cubes'])
+            ->where('state_section', 'active')
+            ->get()
+            ->values();
+
+        // Reenumerar los cubos activos antes de enviar la respuesta
+        foreach ($sections as $section) {
+            foreach ($section->active_sentences as $sentence) {
+                // Reindexar los cubos activos
+                $cubes = $sentence->active_cubes->values(); // asegura índices consecutivos
+
+                foreach ($cubes as $index => $cube) {
+                    // Asignamos un número consecutivo temporalmente (sin guardar en BD)
+                    $cube->number_cube = $index + 1;
+                }
+
+                // Actualizamos la colección para que se refleje en el JSON final
+                $sentence->setRelation('active_cubes', $cubes);
+            }
+        }
+
+        return response()->json($sections);
+    }
+
     // Consultar todas las secciones con paginación
     public function indexPaginated(Request $request)
     {

@@ -70,7 +70,20 @@ class SentenceController extends Controller
         $sentences = Sentence::with(['active_cubes', 'section'])
             ->where('state_sentence', 'active')
             ->get()
-            ->values(); 
+            ->values();
+
+        // Reenumerar los number_cube solo en la respuesta (sin modificar BD)
+        foreach ($sentences as $sentence) {
+            $cubes = $sentence->active_cubes->values(); // reindexar la colección
+
+            foreach ($cubes as $index => $cube) {
+                // Asignamos un número consecutivo temporal (no persistente)
+                $cube->number_cube = $index + 1;
+            }
+
+            // Refrescamos la relación para el JSON final
+            $sentence->setRelation('active_cubes', $cubes);
+        }
 
         return response()->json($sentences);
     }

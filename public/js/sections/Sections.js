@@ -27,9 +27,9 @@ function CreateSection(event) {
                     bootstrap.Modal.getInstance(modalEl) ||
                     new bootstrap.Modal(modalEl);
                 if (modal) {
+                    formCreateSection.reset();
                     modal.hide();
                     loadSections();
-                    formUpdateSection.reset();
                 }
             } else {
                 console.error("Error al crear la sección:", data);
@@ -42,8 +42,7 @@ function CreateSection(event) {
 
 function UpdateSection(event) {
     event.preventDefault();
-    const form = this;
-    const formData = new FormData(form);
+    const formData = new FormData(formUpdateSection);
 
     // Capturar orden de sentencias
     const sentencesContainer = document.getElementById("sentencesContainer");
@@ -79,9 +78,9 @@ function UpdateSection(event) {
                     bootstrap.Modal.getInstance(modalEl) ||
                     new bootstrap.Modal(modalEl);
                 if (modal) {
+                    formUpdateSection.reset();
                     modal.hide();
                     loadSections();
-                    formUpdateSection.reset();
                 }
             }
         });
@@ -109,9 +108,9 @@ function DeleteSection(event) {
                     bootstrap.Modal.getInstance(modalEl) ||
                     new bootstrap.Modal(modalEl);
                 if (modal) {
+                    formDeleteSection.reset();
                     modal.hide();
                     loadSections();
-                    formUpdateSection.reset();
                 }
             } else {
                 console.error("Error al crear la sección:", data);

@@ -23,4 +23,11 @@ class Section extends Model
         return $this->hasMany(Sentence::class, 'id_section')
             ->orderBy('number_sentence', 'asc');
     }
+
+    public function active_sentences()
+    {
+        return $this->hasMany(Sentence::class, 'id_section')
+            ->where('state_sentence', 'active')
+            ->orderBy('number_sentence', 'asc');
+    }
 }

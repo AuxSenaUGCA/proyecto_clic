@@ -30,5 +30,5 @@ Route::prefix('sentences')->group(function () {
 
 Route::prefix('sections')->group(function () {
     Route::get('/index', [SectionController::class, 'index'])->name('sections.index'); // Listar todas
-
+    Route::get('/indexActive', [SectionController::class, 'indexActive'])->name('sections.indexActive'); // Listar todas las activas
 });

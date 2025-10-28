@@ -41,9 +41,9 @@ function CreateSentence(event) {
                     bootstrap.Modal.getInstance(modalEl) ||
                     new bootstrap.Modal(modalEl);
                 if (modal) {
+                    formCreateSentence.reset();
                     modal.hide();
                     loadSections();
-                    formUpdateSection.reset();
                 }
             } else {
                 console.error("Error al crear la frase:", data);
@@ -91,9 +91,9 @@ function UpdateSentence(event) {
                     bootstrap.Modal.getInstance(modalEl) ||
                     new bootstrap.Modal(modalEl);
                 if (modal) {
+                    formUpdateSentence.reset();
                     modal.hide();
                     loadSections();
-                    formUpdateSection.reset();
                 }
             } else {
                 console.error("Error al crear la sección:", data);
@@ -126,9 +126,9 @@ function DeleteSentence(event) {
                     bootstrap.Modal.getInstance(modalEl) ||
                     new bootstrap.Modal(modalEl);
                 if (modal) {
+                    formDeleteSentence.reset();
                     modal.hide();
                     loadSections();
-                    formUpdateSection.reset();
                 }
             } else {
                 console.error("Error al crear la sección:", data);

@@ -1,8 +1,9 @@
-function createCardUsers(user, index) {
+import { loadUsers } from "../load/LoadPage.js";
+
+export function createCardUsers(user, index) {
     const userCard = document.createElement("div");
     userCard.className = "col-md-3 col-sm-6 mb-3 user-card";
     userCard.dataset.id = user.id;
-    // 🎖️ Colores para los tres primeros
     let borderColor = "";
     if (index === 0) borderColor = "3px solid gold"; // 1° - Dorado
     else if (index === 1) borderColor = "3px solid silver"; // 2° - Plata

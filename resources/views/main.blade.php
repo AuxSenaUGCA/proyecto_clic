@@ -164,7 +164,7 @@
                         <label class="form-label">Cubos</label>
                         <div id="cubesContainer"></div>
                         <button type="button" class="btn btn-sm btn-primary mt-2" id="addCubeBtn">
-                            Agregar Sección
+                            Agregar Cubo
                         </button>
                     </div>
 
