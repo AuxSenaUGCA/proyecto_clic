@@ -72,7 +72,7 @@ class SentenceController extends Controller
             ->get()
             ->values();
 
-        // Reenumerar los number_cube solo en la respuesta (sin modificar BD)
+        // Reenumerar los number_cube solo en la respuesta
         foreach ($sentences as $sentence) {
             $cubes = $sentence->active_cubes->values(); // reindexar la colección
 
@@ -81,7 +81,6 @@ class SentenceController extends Controller
                 $cube->number_cube = $index + 1;
             }
 
-            // Refrescamos la relación para el JSON final
             $sentence->setRelation('active_cubes', $cubes);
         }
 
@@ -93,7 +92,7 @@ class SentenceController extends Controller
     {
         $sentences = Sentence::with(['cubes', 'section'])
             ->where('id_section', $id_section)
-            ->orderBy('number_sentence', 'asc') // <-- ordenar por número de sentencia
+            ->orderBy('number_sentence', 'asc') 
             ->get()
             ->values();
 
@@ -131,7 +130,7 @@ class SentenceController extends Controller
             'cubes.*.id_cube' => 'sometimes|exists:cubes,id_cube',
             'cubes.*.text_cube'  => 'required|string',
             'cubes.*.state_cube' => 'in:active,inactive',
-            'deleted_cubes'   => 'nullable|string', // IDs separados por coma
+            'deleted_cubes'   => 'nullable|string',
         ]);
 
         // --- ACTUALIZAR FRASE ---
