@@ -1,5 +1,26 @@
 let draggedSentence = null;
 
+export function fillCreateSectionModal() {
+    fetch("/teachers/index")
+        .then((response) => response.json())
+        .then((data) => {
+            const form = document.querySelector("#createSectionModal form");
+            const select = form.querySelector("select[name='id_profe']");
+
+            select.innerHTML = '<option value="">-- Sin asignar --</option>';
+
+            data.forEach((teacher) => {
+                const option = document.createElement("option");
+                option.value = teacher.id;
+                option.textContent = `${teacher.first_name} ${teacher.first_lastname}`;
+                select.appendChild(option);
+            });
+        })
+        .catch((error) => {
+            console.error("Error al cargar los profesores:", error);
+        });
+}
+
 export function fillCreateSentenceModal(id_section) {
     const form = document.querySelector("#createSentenceModal form");
     form.querySelector("#id_section").value = id_section;
@@ -11,11 +32,30 @@ export function fillDeleteSectionModal(id_section) {
 }
 
 // Función para rellenar modal con sección y sus sentencias
-export function fillUpdateSectionModal(section) {
+export async function fillUpdateSectionModal(section) {
     const form = document.getElementById("updateSectionForm");
+
+    await fetch("/teachers/index")
+        .then((response) => response.json())
+        .then((data) => {
+            const select = form.querySelector("select[name='id_profe']");
+
+            select.innerHTML = '<option value="">-- Sin asignar --</option>';
+
+            data.forEach((teacher) => {
+                const option = document.createElement("option");
+                option.value = teacher.id;
+                option.textContent = `${teacher.first_name} ${teacher.first_lastname}`;
+                select.appendChild(option);
+            });
+        })
+        .catch((error) => {
+            console.error("Error al cargar los profesores:", error);
+        });
 
     form.querySelector("#update_id_section").value = section.id_section;
     form.querySelector("#update_name_section").value = section.name_section;
+    form.querySelector("#update_note_section").value = section.note_section;
     form.querySelector("#update_state_section").value = section.state_section;
     form.querySelector("#update_id_profe").value = section.id_profe;
 
@@ -57,3 +97,7 @@ export function fillUpdateSectionModal(section) {
     });
 }
 
+const btnCrearSeccion = document.getElementById("CrearSeccion");
+if (btnCrearSeccion) {
+    btnCrearSeccion.addEventListener("click", fillCreateSectionModal);
+}

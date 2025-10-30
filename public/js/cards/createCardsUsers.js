@@ -1,4 +1,8 @@
-import { loadUsers } from "../load/LoadPage.js";
+import { loadUsers, updateUsersRace } from "../load/loadUsers.js";
+import {
+    fillDeleteUserModal,
+    fillClearUserModal,
+} from "../users/fillFieldsUsers.js";
 
 export function createCardUsers(user, index) {
     const userCard = document.createElement("div");
@@ -15,7 +19,7 @@ export function createCardUsers(user, index) {
                 <img src="${user.avatar || "/img/default-avatar.png"}"
                     alt="Avatar" 
                     class="rounded-circle mb-2"
-                    style="width: 60px; height: 60px; object-fit: cover;">
+                    style="width: 60px; height: 60px; object-fit: cover; object-position: center top;">
                 <h6 class="mb-1 fw-bold text-truncate" title="${user.name}">
                     ${user.name}
                 </h6>
@@ -26,43 +30,38 @@ export function createCardUsers(user, index) {
             </div>
             <div class="card-footer bg-transparent border-0 p-2 d-flex justify-content-center gap-2">
                 <button class="btn btn-danger"
-                    data-bs-toggle="modal" data-bs-target="#deleteUserModal"
-                    onclick="fillDeleteUserModal(${user.id})">
+                    data-bs-toggle="modal" data-bs-target="#deleteUserModal" id="DeleteUser">
                     <i class="bi bi-trash me-1"></i> Eliminar
                 </button>
                 <button class="btn btn-warning text-white"
-                    data-bs-toggle="modal" data-bs-target="#clearUserModal"
-                    onclick="fillClearUserModal(${user.id})">
+                    data-bs-toggle="modal" data-bs-target="#clearUserModal"} id="ClearUser">
                     <i class="bi bi-eraser me-1"></i> Limpiar
                 </button>
             </div>
         </div>
     `;
 
+    // ============== EVENTOS ============== //
+    const btnDeleteUser = userCard.querySelector("#DeleteUser");
+    if (btnDeleteUser) {
+        btnDeleteUser.addEventListener("click", () => {
+            fillDeleteUserModal(userCard.dataset.id);
+        });
+    }
+
+    const btnClearUser = userCard.querySelector("#ClearUser");
+    if (btnClearUser) {
+        btnClearUser.addEventListener("click", () => {
+            fillClearUserModal(userCard.dataset.id);
+        });
+    }
+
     return userCard;
-}
-
-// === ELIMINAR USUARIO ===
-function fillDeleteUserModal(id_user) {
-    const form = document.querySelector("#deleteUserModal form");
-    form.action = `/users/delete/${id_user}`;
-    document.getElementById("delete_id_user").value = id_user;
-    form.addEventListener("submit", function (event) {
-        e.preventDefault();
-        loadUsers();
-    });
-}
-
-// === ELIMINAR USUARIO ===
-function fillClearUserModal(id_user) {
-    const form = document.querySelector("#clearUserModal form");
-    form.action = `/users/clear/${id_user}`;
-    document.getElementById("clear_id_user").value = id_user;
-    form.addEventListener("submit", function (event) {
-        e.preventDefault();
-        loadUsers();
-    });
 }
 
 // Llamar al cargar la página
 document.addEventListener("DOMContentLoaded", loadUsers);
+document.addEventListener("DOMContentLoaded", () => {
+    updateUsersRace();
+    setInterval(() => updateUsersRace(), 5000);
+});

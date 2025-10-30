@@ -18,6 +18,7 @@ class SectionController extends Controller
             'id_profe' => 'nullable|exists:users,id',
             'name_section' => 'required|string',
             'state_section' => 'nullable|in:active,inactive',
+            'note_section' => 'nullable|string',
         ]);
 
         // Número de la frase
@@ -29,6 +30,7 @@ class SectionController extends Controller
             'name_section' => $request->name_section,
             'state_section' => $request->state_section ?? 'active',
             'id_profe'   => $request->id_profe,
+            'note_section' => $request->note_section,
         ]);
 
         return response()->json([
@@ -52,18 +54,14 @@ class SectionController extends Controller
             ->get()
             ->values();
 
-        // Reenumerar los cubos activos antes de enviar la respuesta
         foreach ($sections as $section) {
             foreach ($section->active_sentences as $sentence) {
-                // Reindexar los cubos activos
-                $cubes = $sentence->active_cubes->values(); // asegura índices consecutivos
+                $cubes = $sentence->active_cubes->values();
 
                 foreach ($cubes as $index => $cube) {
-                    // Asignamos un número consecutivo temporalmente (sin guardar en BD)
                     $cube->number_cube = $index + 1;
                 }
 
-                // Actualizamos la colección para que se refleje en el JSON final
                 $sentence->setRelation('active_cubes', $cubes);
             }
         }
@@ -118,9 +116,10 @@ class SectionController extends Controller
         $section = Section::findOrFail($id);
 
         $request->validate([
-            'id_profe' => 'nullable|exists:users,id',
+            'id_profe' => 'nullable|exists:teachers,id',
             'name_section' => 'sometimes|string',
             'state_section' => 'sometimes|in:active,inactive',
+            'note_section' => 'nullable|string',
             'sentences' => 'nullable|array',
             'sentences.*.id_sentence' => 'required|exists:sentences,id_sentence',
             'sentences.*.text_sentence' => 'required|string',
@@ -132,6 +131,7 @@ class SectionController extends Controller
             'id_profe' => $request->id_profe ?? $section->id_profe,
             'name_section' => $request->name_section ?? $section->name_section,
             'state_section' => $request->state_section ?? $section->state_section,
+            'note_section' => $request->note_section ?? $section->note_section,
         ]);
 
         // --- Actualizar sentencias ---

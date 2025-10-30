@@ -20,6 +20,7 @@ class Sentence extends Model
         'number_sentence',
         'text_sentence',
         'state_sentence',
+        'note_sentence'
     ];
 
     // Si quieres que 'state' tenga valor por defecto

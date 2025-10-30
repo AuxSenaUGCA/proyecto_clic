@@ -10,12 +10,12 @@ class Section extends Model
     use HasFactory;
 
     protected $primaryKey = 'id_section';
-    protected $fillable = ['number_section', 'id_profe', 'name_section', 'state_section'];
+    protected $fillable = ['number_section', 'id_profe', 'name_section', 'state_section', 'note_section'];
     public $incrementing = false;
 
     public function profesor()
     {
-        return $this->belongsTo(User::class, 'id_profe');
+        return $this->belongsTo(Teacher::class,  'id_profe', 'id');
     }
 
     public function sentences()

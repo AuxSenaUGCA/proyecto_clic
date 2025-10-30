@@ -1,4 +1,4 @@
-import { loadSections } from "./loadPage.js";
+import { loadSections } from "./loadMain.js";
 
 export function renderPaginator(sectionsData) {
     const paginator = document.getElementById("paginator");

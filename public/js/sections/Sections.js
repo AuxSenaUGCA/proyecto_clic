@@ -1,4 +1,4 @@
-import { loadSections } from "../load/LoadPage.js";
+import { loadSections } from "../load/loadMain.js";
 
 const formCreateSection = document.querySelector("#createSectionModal form");
 const formUpdateSection = document.querySelector("#updateSectionModal form");
@@ -55,7 +55,7 @@ function UpdateSection(event) {
             `sentences[${index}][text_sentence]`,
             div.querySelector("input").value
         );
-        formData.append(`sentences[${index}][number_sentence]`, index + 1); // número según el orden
+        formData.append(`sentences[${index}][number_sentence]`, index + 1); 
     });
     formData.set("_method", "PUT");
 

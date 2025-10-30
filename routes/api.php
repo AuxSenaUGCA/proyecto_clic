@@ -8,20 +8,20 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('cubes')->group(function () {
-    Route::get('/index', [CubeController::class, 'index'])->name('cubes.index'); // Listar todos
-    Route::get('/show/{id}', [CubeController::class, 'show'])->name('cubes.show'); // Consultar
-    Route::post('/store', [CubeController::class, 'store'])->name('cubes.store'); // Crear
-    Route::put('/update/{id_cube}', [CubeController::class, 'update'])->name('cubes.update'); // Actualizar
-    Route::delete('/delete/{id_cube}', [CubeController::class, 'destroy'])->name('cubes.destroy'); // Eliminar)
+    Route::get('/index', [CubeController::class, 'index'])->name('cubes.index'); 
+    Route::get('/show/{id}', [CubeController::class, 'show'])->name('cubes.show'); 
+    Route::post('/store', [CubeController::class, 'store'])->name('cubes.store');
+    Route::put('/update/{id_cube}', [CubeController::class, 'update'])->name('cubes.update'); 
+    Route::delete('/delete/{id_cube}', [CubeController::class, 'destroy'])->name('cubes.destroy'); 
 });
 
 Route::prefix('users')->group(function () {
-    Route::get('/index', [UserController::class, 'index'])->name('users.index'); // Listar todos
-    Route::get('/show/{id}', [UserController::class, 'show'])->name('users.show'); // Consultar un usuario
+    Route::get('/index', [UserController::class, 'index'])->name('users.index');
+    Route::get('/show/{id}', [UserController::class, 'show'])->name('users.show');
     Route::post('/store', [UserController::class, 'store'])->name('users.store');
-    Route::put('/update/{id}', [UserController::class, 'update'])->name('users.update'); // Actualizar usuario
-    Route::delete('/delete/{id}', [UserController::class, 'destroy'])->name('users.destroy'); // Eliminar usuario
-    Route::get('/search', [UserController::class, 'search'])->name('users.search'); // Buscar
+    Route::put('/update/{id}', [UserController::class, 'update'])->name('users.update'); 
+    Route::delete('/delete/{id}', [UserController::class, 'destroy'])->name('users.destroy'); 
+    Route::get('/search', [UserController::class, 'search'])->name('users.search'); 
 });
 
 Route::prefix('sentences')->group(function () {
@@ -29,6 +29,6 @@ Route::prefix('sentences')->group(function () {
 });
 
 Route::prefix('sections')->group(function () {
-    Route::get('/index', [SectionController::class, 'index'])->name('sections.index'); // Listar todas
-    Route::get('/indexActive', [SectionController::class, 'indexActive'])->name('sections.indexActive'); // Listar todas las activas
+    Route::get('/index', [SectionController::class, 'index'])->name('sections.index'); 
+    Route::get('/indexActive', [SectionController::class, 'indexActive'])->name('sections.indexActive'); 
 });

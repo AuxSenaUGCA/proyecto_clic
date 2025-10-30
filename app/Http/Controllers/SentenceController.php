@@ -16,6 +16,7 @@ class SentenceController extends Controller
             'text_sentence'   => 'required|string',
             'state_sentence'  => 'in:active,inactive',
             'id_section'      => 'required|exists:sections,id_section',
+            'note_sentence' => 'nullable|string',
             'cubes'           => 'array|max:4',
             'cubes.*.text_cube'  => 'required|string',
             'cubes.*.state_cube' => 'in:active,inactive'
@@ -31,6 +32,7 @@ class SentenceController extends Controller
             'number_sentence' => $newNumber,
             'text_sentence'   => $request->text_sentence,
             'state_sentence'  => $request->state_sentence ?? 'active',
+            'note_sentence'   => $request->note_sentence,
             'id_section'      => $request->id_section,
         ]);
 
@@ -92,7 +94,7 @@ class SentenceController extends Controller
     {
         $sentences = Sentence::with(['cubes', 'section'])
             ->where('id_section', $id_section)
-            ->orderBy('number_sentence', 'asc') 
+            ->orderBy('number_sentence', 'asc')
             ->get()
             ->values();
 
@@ -125,6 +127,7 @@ class SentenceController extends Controller
         $request->validate([
             'text_sentence'   => 'sometimes|string',
             'state_sentence'  => 'sometimes|in:active,inactive',
+            'note_sentence' => 'nullable|string',
             'id_section'      => 'sometimes|exists:sections,id_section',
             'cubes'           => 'array|max:4',
             'cubes.*.id_cube' => 'sometimes|exists:cubes,id_cube',
@@ -134,7 +137,7 @@ class SentenceController extends Controller
         ]);
 
         // --- ACTUALIZAR FRASE ---
-        $sentence->update($request->only('text_sentence', 'state_sentence', 'id_section'));
+        $sentence->update($request->only('text_sentence', 'state_sentence', 'note_sentence','id_section'));
 
         // --- ELIMINAR CUBOS BORRADOS ---
         if ($request->filled('deleted_cubes')) {

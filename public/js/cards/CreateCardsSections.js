@@ -1,4 +1,4 @@
-import { loadSections } from "../load/LoadPage.js";
+import { loadSections } from "../load/loadMain.js";
 import { createCardSentences } from "./CreateCardsSentences.js";
 import {
     fillCreateSentenceModal,
@@ -29,9 +29,10 @@ export function createCardSection(section) {
 
             <div class="card-body">
                 <p><strong>Profesor:</strong> ${
-                    section.profesor ? section.profesor.name : "Sin asignar"
+                    section.profesor
+                        ? `${section.profesor.first_name} ${section.profesor.first_lastname}`
+                        : "Sin asignar"
                 }</p>
-
                 <hr>
                 <h6>Frases:</h6>
                 <div class="row" id="sentences_for_${

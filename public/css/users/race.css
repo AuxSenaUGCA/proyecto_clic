@@ -1,0 +1,78 @@
+.race-track {
+    position: relative;
+    width: 100%;
+    height: 60px;
+    background-color: #1a1a1a; /* asfalto oscuro */
+    border-radius: 10px;
+    margin-bottom: 0px;
+    overflow: hidden;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+/* líneas blancas internas (superior e inferior, sin tocar bordes) */
+.race-track::before,
+.race-track::after {
+    content: "";
+    position: absolute;
+    left: 10px;           /* margen desde el borde izquierdo */
+    right: 10px;          /* margen desde el borde derecho */
+    height: 3px;
+    background-color: white;
+    border-radius: 2px;
+}
+.race-track::before {
+    top: 6px;             /* un poco dentro desde arriba */
+}
+.race-track::after {
+    bottom: 6px;          /* un poco dentro desde abajo */
+}
+
+/* línea amarilla discontinua central */
+.center-line {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: 3px;
+    background: repeating-linear-gradient(
+        to right,
+        yellow 0 20px,
+        transparent 20px 40px
+    );
+    transform: translateY(-50%);
+    opacity: 0.9;
+}
+
+/* Corredor */
+.runner {
+    position: absolute;
+    bottom: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: left 0.6s ease;
+}
+
+.runner img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center top;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.runner-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    text-shadow: 0 1px 2px black;
+}
+
+.runner-stats {
+    font-size: 12px;
+    color: #ccc;
+    display: flex;
+    gap: 8px;
+}

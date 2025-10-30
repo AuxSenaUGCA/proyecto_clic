@@ -13,7 +13,7 @@
 
     <!-- Botón principal -->
     <div class="d-flex gap-3 mb-4">
-        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createSectionModal">
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createSectionModal" id="CrearSeccion">
             Crear Sección
         </button>
     </div>
@@ -45,8 +45,13 @@
                     </div>
 
                     <div class="mb-3">
+                        <label class="form-label">Nota de la Sección</label>
+                        <textarea name="note_section" class="form-control" rows="3" maxlength="200" placeholder="Escribe una nota (opcional)..."></textarea>
+                    </div>
+
+                    <div class="mb-3">
                         <label class="form-label">Profesor (opcional)</label>
-                        <select name="id_profesor" class="form-select">
+                        <select name="id_profe" class="form-select">
                             <option value="">-- Sin asignar --</option>
                             <!-- Puedes llenar esta lista dinámicamente -->
                         </select>
@@ -84,6 +89,11 @@
                     <div class="mb-3">
                         <label for="update_name_section" class="form-label">Nombre de la Sección</label>
                         <input type="text" class="form-control" id="update_name_section" name="name_section" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Nota de la Sección</label>
+                        <textarea name="note_section" id="update_note_section" class="form-control" rows="3" maxlength="200" placeholder="Escribe una nota (opcional)..."></textarea>
                     </div>
 
                     <div class="mb-3">
@@ -159,6 +169,11 @@
                         </select>
                     </div>
 
+                    <div class="mb-3">
+                        <label class="form-label">Nota de la Frase</label>
+                        <textarea name="note_sentence" id="note_sentence" class="form-control" rows="3" maxlength="200" placeholder="Escribe una nota (opcional)..."></textarea>
+                    </div>
+
                     <!-- Cubos -->
                     <div class="mb-3">
                         <label class="form-label">Cubos</label>
@@ -196,6 +211,11 @@
                             <option value="active">Activo</option>
                             <option value="inactive">Inactivo</option>
                         </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Nota de la Frase</label>
+                        <textarea name="note_sentence" id="update_note_sentence" class="form-control" rows="3" maxlength="200" placeholder="Escribe una nota (opcional)..."></textarea>
                     </div>
 
                     <!-- Cubos -->
@@ -241,7 +261,7 @@
 </div>
 
 <script type="module" src="{{ asset('js/load/paginador.js') }}"></script>
-<script type="module" src="{{ asset('js/load/loadPage.js') }}"></script>
+<script type="module" src="{{ asset('js/load/loadMain.js') }}"></script>
 <script type="module" src="{{ asset('js/sections/fillFieldsSections.js') }}"></script>
 <script type="module" src="{{ asset('js/sentences/fillFieldsSentences.js') }}"></script>
 <script type="module" src="{{ asset('js/inputs/sentences/CreateSentencesInputs.js') }}"></script>

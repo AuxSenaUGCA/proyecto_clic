@@ -1,4 +1,4 @@
-import { loadSections } from "../load/LoadPage.js";
+import { loadSections } from "../load/loadMain.js";
 import { deletedCubeIds } from "../inputs/sentences/UpdateSentencesInputs.js";
 
 const formCreateSentence = document.querySelector("#createSentenceModal form");
