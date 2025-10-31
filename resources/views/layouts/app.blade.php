@@ -14,7 +14,7 @@
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container">
+        <div class="container justify-content-start gap-2">
             <a class="navbar-brand" href="{{ route('sentences') }}">Frases</a>
             <a class="navbar-brand" href="{{ route('users') }}">Tabla Clasificacion</a>
         </div>

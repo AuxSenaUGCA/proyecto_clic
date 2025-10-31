@@ -79,7 +79,7 @@
         <div id="usersContainer" class="row"></div>
     </div>
 
-    <div class="race-container mt-5">
+    <div class="race-container mt-5 mb-4">
         <h2 class="mb-4">Carrera de Usuarios</h2>
         <div id="raceTrack"></div>
     </div>

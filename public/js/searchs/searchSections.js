@@ -1,20 +1,52 @@
 document.addEventListener("DOMContentLoaded", function () {
     const searchInput = document.getElementById("SearchBar");
     const resultsDiv = document.getElementById("searchResults");
+    const filterSelect = document.querySelector(".form-select");
 
-    searchInput.addEventListener("input", function () {
-        const query = this.value.trim();
+    function performSearch() {
+        const query = searchInput.value.trim();
+        const filter = filterSelect.value;
 
-        if (query.length < 2) {
-            resultsDiv.innerHTML = "";
-            // Mostrar todas las cards si input vacío
-            document
-                .querySelectorAll("#sectionsContainer .section-card")
-                .forEach((card) => (card.style.display = "block"));
+        // ✅ Si el campo de búsqueda está vacío, aplicar solo el filtro
+        if (query.length === 0) {
+            fetch(`/sections/search?filter=${filter}`)
+                .then((res) => res.json())
+                .then((data) => {
+                    resultsDiv.innerHTML = "";
+
+                    if (data.length === 0) {
+                        resultsDiv.innerHTML =
+                            "<div class='list-group-item'>Sin resultados</div>";
+                        document
+                            .querySelectorAll(
+                                "#sectionsContainer .section-card"
+                            )
+                            .forEach((card) => (card.style.display = "none"));
+                        return;
+                    }
+
+                    // Mostrar todas las cards según el filtro
+                    const ids = data.map((s) => s.id_section);
+                    document
+                        .querySelectorAll("#sectionsContainer .section-card")
+                        .forEach((card) => {
+                            card.style.display = ids.includes(
+                                Number(card.dataset.id)
+                            )
+                                ? "block"
+                                : "none";
+                        });
+                })
+                .catch((error) =>
+                    console.error("Error al aplicar filtro:", error)
+                );
             return;
         }
 
-        fetch(`/sections/search?q=${encodeURIComponent(query)}`)
+        // 🔍 Si hay texto, hacer búsqueda normal
+        fetch(
+            `/sections/search?q=${encodeURIComponent(query)}&filter=${filter}`
+        )
             .then((res) => res.json())
             .then((data) => {
                 resultsDiv.innerHTML = "";
@@ -22,6 +54,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (data.length === 0) {
                     resultsDiv.innerHTML =
                         "<div class='list-group-item'>Sin resultados</div>";
+                    document
+                        .querySelectorAll("#sectionsContainer .section-card")
+                        .forEach((card) => (card.style.display = "none"));
                     return;
                 }
 
@@ -31,26 +66,34 @@ document.addEventListener("DOMContentLoaded", function () {
                         "list-group-item",
                         "list-group-item-action"
                     );
-
-                    // Si tu tabla tiene un campo de texto visible (como "nombre_section" o "titulo"),
-                    // cámbialo aquí para que se muestre algo más descriptivo.
-                    item.textContent = `${section.name_section} - Profesor ID: ${section.id_profesor}`;
-
+                    item.textContent = `${section.name_section} - Profesor ID: ${section.id_profe}`;
                     item.addEventListener("click", function () {
                         searchInput.value = `Sección #${section.id_section}`;
                         resultsDiv.innerHTML = "";
                         filterVisibleCards(section.id_section);
                     });
-
                     resultsDiv.appendChild(item);
                 });
-            })
-            .catch((error) => {
-                console.error("Error al buscar secciones:", error);
-            });
-    });
 
-    // Mostrar solo la card seleccionada
+                const ids = data.map((s) => s.id_section);
+                document
+                    .querySelectorAll("#sectionsContainer .section-card")
+                    .forEach((card) => {
+                        card.style.display = ids.includes(
+                            Number(card.dataset.id)
+                        )
+                            ? "block"
+                            : "none";
+                    });
+            })
+            .catch((error) =>
+                console.error("Error al buscar secciones:", error)
+            );
+    }
+
+    searchInput.addEventListener("input", performSearch);
+    filterSelect.addEventListener("change", performSearch);
+
     function filterVisibleCards(id_section) {
         document
             .querySelectorAll("#sectionsContainer .section-card")

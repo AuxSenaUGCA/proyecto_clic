@@ -2,14 +2,20 @@
 
 @section('content')
 <div class="container mt-5">
-
     <h2 class="mb-4">Gestión de Secciones</h2>
 
-    <div class="mb-3">
-        <label for="SearchBar" class="form-label">Buscar Sección</label>
-        <input type="text" id="SearchBar" class="form-control" placeholder="Escribe para buscar...">
-        <div id="searchResults" class="list-group mt-1"></div>
+    <div class="input-group">
+        <div class="form-floating">
+            <input type="text" id="SearchBar" class="form-control" placeholder="Escribe para buscar...">
+            <label for="SearchBar">Escribe para buscar...</label>
+        </div>
+        <select class="form-select" style="max-width: 160px;">
+            <option value="all">Todas</option>
+            <option value="active">Activas</option>
+            <option value="inactive">Inactivas</option>
+        </select>
     </div>
+    <div id="searchResults" class="list-group mb-3 mt-1 max-h-24 overflow-auto"></div>
 
     <!-- Botón principal -->
     <div class="d-flex gap-3 mb-4">

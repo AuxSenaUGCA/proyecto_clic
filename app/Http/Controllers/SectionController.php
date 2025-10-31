@@ -93,19 +93,31 @@ class SectionController extends Controller
     public function search(Request $request)
     {
         $q = $request->get('q');
+        $filter = $request->get('filter', 'all'); 
 
         $sections = Section::with('profesor')
             ->where(function ($query) use ($q) {
                 $query->where('name_section', 'LIKE', "%{$q}%")
+                    ->orWhere('note_section', 'LIKE', "%{$q}%")
                     ->orWhereHas('sentences', function ($sentenceQuery) use ($q) {
                         $sentenceQuery->where('text_sentence', 'LIKE', "%{$q}%")
+                            ->orWhere('note_sentence', 'LIKE', "%{$q}%")
                             ->orWhereHas('cubes', function ($cubeQuery) use ($q) {
                                 $cubeQuery->where('text_cube', 'LIKE', "%{$q}%");
                             });
                     });
-            })
+            });
+
+        // 🔹 Aplicar filtro de estado
+        if ($filter === 'active') {
+            $sections->where('state_section', 'active');
+        } elseif ($filter === 'inactive') {
+            $sections->where('state_section', 'inactive');
+        }
+
+        $sections = $sections
             ->limit(5)
-            ->get(['id_section', 'name_section', 'id_profe']); // campos que quieres devolver
+            ->get(['id_section', 'name_section', 'id_profe', 'state_section']);
 
         return response()->json($sections);
     }
